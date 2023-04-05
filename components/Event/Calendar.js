@@ -8,8 +8,13 @@ import {
   TimelineList,
   TimelineProps,
 } from "react-native-calendars";
+import Animated, {
+  SlideInRight,
+  SlideOutRight,
+  Layout,
+} from "react-native-reanimated";
 import * as expoCalendar from "expo-calendar";
-import CheckInList from "../components/CheckIn/CheckInList";
+import CheckInList from "./CheckInList";
 
 const INITIAL_DATE = new Date();
 const INITIAL_TIME = { hour: 9, minutes: 0 };
@@ -37,7 +42,7 @@ const createCalendar = async () => {
   console.log(`Your new calendar ID is: ${newCalendarID}`);
 };
 
-const CalendarScreen = () => {
+const CalendarTab = () => {
   const [selected, setSelected] = useState(INITIAL_DATE);
   const [currentMonth, setCurrentMonth] = useState(INITIAL_DATE);
 
@@ -62,21 +67,26 @@ const CalendarScreen = () => {
     };
   }, [selected]);
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await expoCalendar.requestCalendarPermissionsAsync();
-      if (status === "granted") {
-        const calendars = await expoCalendar.getCalendarsAsync(
-          expoCalendar.EntityTypes.EVENT
-        );
-        console.log("Here are all your calendars:");
-        console.log({ calendars });
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const { status } = await expoCalendar.requestCalendarPermissionsAsync();
+  //     if (status === "granted") {
+  //       const calendars = await expoCalendar.getCalendarsAsync(
+  //         expoCalendar.EntityTypes.EVENT
+  //       );
+  //       console.log("Here are all your calendars:");
+  //       console.log({ calendars });
+  //     }
+  //   })();
+  // }, []);
 
   return (
-    <View style={styles.container}>
+    <Animated.View
+      entering={SlideInRight}
+      exiting={SlideOutRight}
+      layout={Layout.springify()}
+      style={styles.container}
+    >
       <Calendar
         enableSwipeMonths
         style={styles.calender}
@@ -140,7 +150,7 @@ const CalendarScreen = () => {
       <CheckInList />
       {/* <Agenda /> */}
       {/* <Button title="Create a new calendar" onPress={createCalendar} /> */}
-    </View>
+    </Animated.View>
   );
 };
 
@@ -158,4 +168,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CalendarScreen;
+export default CalendarTab;

@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import dayjs from "dayjs";
 import Card from "../../UI/Card";
 import checkInData from "../../data/checkin";
@@ -13,7 +13,7 @@ const CheckInList = () => {
       renderItem={(itemData) => (
         <Card>
           <View style={styles.contentView}>
-            <Ionicons name="checkmark-circle" size={24} color="#3852a8" />
+            <FontAwesome5 name="calendar-check" size={24} color="#3852a8" />
             <View style={styles.contentItem}>
               <Text style={[styles.title, styles.text]}>
                 {itemData.item.title}
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
   },
   contentView: {
     flexDirection: "row",
+    alignItems: "center"
   },
   contentItem: {
     flex: 3,

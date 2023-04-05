@@ -9,7 +9,7 @@ import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import LoginScreen from "./screens/Login";
 import HomeScreen from "./screens/Home";
 import SignUpScreen from "./screens/SignUp";
-import CalendarScreen from "./screens/Calendar";
+import CheckInScreen from "./screens/Event";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,10 +48,10 @@ export default function App() {
           }}
         />
         <Tab.Screen
-          name="calendar"
-          component={CalendarScreen}
+          name="event"
+          component={CheckInScreen}
           options={{
-            title: "Check In",
+            title: "Event",
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="calendar" size={size} color={color} />
             ),
