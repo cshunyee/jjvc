@@ -14,9 +14,10 @@ import Animated, {
   Layout,
 } from "react-native-reanimated";
 import * as expoCalendar from "expo-calendar";
+import dayjs from "dayjs";
 import CheckInList from "./CheckInList";
 
-const INITIAL_DATE = new Date();
+const INITIAL_DATE = dayjs().format("YYYY-MM-DD");
 const INITIAL_TIME = { hour: 9, minutes: 0 };
 
 const getDefaultCalendarSource = async () => {
@@ -24,23 +25,23 @@ const getDefaultCalendarSource = async () => {
   return defaultCalendar.source;
 };
 
-const createCalendar = async () => {
-  const defaultCalendarSource =
-    Platform.OS === "ios"
-      ? await getDefaultCalendarSource()
-      : { isLocalAccount: true, name: "Expo Calendar" };
-  const newCalendarID = await Calendar.createCalendarAsync({
-    title: "Expo Calendar",
-    color: "blue",
-    entityType: expoCalendar.EntityTypes.EVENT,
-    sourceId: defaultCalendarSource.id,
-    source: defaultCalendarSource,
-    name: "internalCalendarName",
-    ownerAccount: "personal",
-    accessLevel: Calendar.CalendarAccessLevel.OWNER,
-  });
-  console.log(`Your new calendar ID is: ${newCalendarID}`);
-};
+// const createCalendar = async () => {
+//   const defaultCalendarSource =
+//     Platform.OS === "ios"
+//       ? await getDefaultCalendarSource()
+//       : { isLocalAccount: true, name: "Expo Calendar" };
+//   const newCalendarID = await Calendar.createCalendarAsync({
+//     title: "Expo Calendar",
+//     color: "blue",
+//     entityType: expoCalendar.EntityTypes.EVENT,
+//     sourceId: defaultCalendarSource.id,
+//     source: defaultCalendarSource,
+//     name: "internalCalendarName",
+//     ownerAccount: "personal",
+//     accessLevel: Calendar.CalendarAccessLevel.OWNER,
+//   });
+//   console.log(`Your new calendar ID is: ${newCalendarID}`);
+// };
 
 const CalendarTab = () => {
   const [selected, setSelected] = useState(INITIAL_DATE);
@@ -54,15 +55,26 @@ const CalendarTab = () => {
 
   const marked = useMemo(() => {
     return {
-      [getDate(-1)]: {
-        dotColor: "red",
-        marked: true,
+      [getDate(0)]: {
+        customStyles: {
+          container: {
+            backgroundColor: "#4d76f0",
+          },
+          text: {
+            color: "white",
+            fontWeight: "bold",
+          },
+        },
       },
-      [selected]: {
-        selected: true,
-        disableTouchEvent: true,
-        selectedColor: "orange",
-        selectedTextColor: "red",
+      [selected.dateString]: {
+        customStyles: {
+          container: {
+            backgroundColor: "#eeb16b",
+          },
+          text: {
+            color: "white",
+          },
+        },
       },
     };
   }, [selected]);
@@ -123,29 +135,7 @@ const CalendarTab = () => {
           },
         }}
         markingType={"custom"}
-        markedDates={{
-          [getDate(0)]: {
-            customStyles: {
-              container: {
-                backgroundColor: "#4d76f0",
-              },
-              text: {
-                color: "white",
-                fontWeight: "bold",
-              },
-            },
-          },
-          [selected.dateString]: {
-            customStyles: {
-              container: {
-                backgroundColor: "#eeb16b",
-              },
-              text: {
-                color: "white",
-              },
-            },
-          },
-        }}
+        markedDates={marked}
       />
       <CheckInList />
       {/* <Agenda /> */}
