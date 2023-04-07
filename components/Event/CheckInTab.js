@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   detailTitle: {
     marginBottom: 8,
-    fontWeight: 600,
+    fontWeight: 700,
   },
   detailText: {
     fontSize: 20,

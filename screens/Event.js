@@ -85,13 +85,14 @@ const CheckInScreen = () => {
       }
     })
     .onEnd((e) => {
-      if (position.value > END_POSITION / 2) {
-        position.value = withTiming(END_POSITION, { duration: 100 });
-        onLeft.value = false;
-      } else {
-        position.value = withTiming(0, { duration: 100 });
-        onLeft.value = true;
-      }
+      position.value = withTiming(0, { duration: 200 });
+      // if (position.value > END_POSITION / 2) {
+      //   position.value = withTiming(END_POSITION, { duration: 100 });
+      //   onLeft.value = false;
+      // } else {
+      //   position.value = withTiming(0, { duration: 100 });
+      //   onLeft.value = true;
+      // }
     });
 
   const animatedStyle = useAnimatedStyle(() => ({
