@@ -1,16 +1,32 @@
-import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import dayjs from "dayjs";
 import Card from "../../UI/Card";
 import checkInData from "../../data/checkin";
+import { set } from "react-native-reanimated";
 
-const CheckInList = () => {
+const CheckInList = ({ month }) => {
+  const [data, setData] = useState([]);
+
+  const getCheckInList = (month) => {
+    const result = checkInData.filter(
+      (item) => dayjs(item.date).format("MM") === month
+    );
+    setData(result);
+  };
+
+  useEffect(() => {
+    if (!month) return;
+    getCheckInList(month);
+  }, [month]);
+
   return (
     <ScrollView style={styles.container}>
-      {checkInData.length === 0 && (
+      {data.length === 0 && (
         <Text style={styles.emptyText}>No available event today</Text>
       )}
-      {checkInData.map((item) => (
+      {data.map((item) => (
         <View key={item.key}>
           <Card>
             <View style={styles.contentView}>

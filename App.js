@@ -11,6 +11,7 @@ import LoginScreen from "./screens/Login";
 import HomeScreen from "./screens/Home";
 import SignUpScreen from "./screens/SignUp";
 import CheckInScreen from "./screens/Event";
+import ProfileScreen from "./screens/Profile";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -60,7 +61,7 @@ export default function App() {
         />
         <Tab.Screen
           name="profile"
-          component={HomeScreen}
+          component={ProfileScreen}
           options={{
             title: "Profile Setting",
             tabBarIcon: ({ color, size }) => (

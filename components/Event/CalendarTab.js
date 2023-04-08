@@ -8,34 +8,12 @@ import Divider from "../../UI/Divider";
 import checkInData from "../../data/checkin";
 
 const INITIAL_DATE = dayjs().format("YYYY-MM-DD");
+const INITIAL_MONTH = dayjs().format("MM");
 const INITIAL_TIME = { hour: 9, minutes: 0 };
-
-const getDefaultCalendarSource = async () => {
-  const defaultCalendar = await Calendar.getDefaultCalendarAsync();
-  return defaultCalendar.source;
-};
-
-// const createCalendar = async () => {
-//   const defaultCalendarSource =
-//     Platform.OS === "ios"
-//       ? await getDefaultCalendarSource()
-//       : { isLocalAccount: true, name: "Expo Calendar" };
-//   const newCalendarID = await Calendar.createCalendarAsync({
-//     title: "Expo Calendar",
-//     color: "blue",
-//     entityType: expoCalendar.EntityTypes.EVENT,
-//     sourceId: defaultCalendarSource.id,
-//     source: defaultCalendarSource,
-//     name: "internalCalendarName",
-//     ownerAccount: "personal",
-//     accessLevel: Calendar.CalendarAccessLevel.OWNER,
-//   });
-//   console.log(`Your new calendar ID is: ${newCalendarID}`);
-// };
 
 const CalendarTab = () => {
   const [selected, setSelected] = useState(INITIAL_DATE);
-  const [currentMonth, setCurrentMonth] = useState(INITIAL_DATE);
+  const [currentMonth, setCurrentMonth] = useState(INITIAL_MONTH);
 
   const getDate = (count) => {
     const date = new Date(INITIAL_DATE);
@@ -65,10 +43,10 @@ const CalendarTab = () => {
       [selected.dateString]: {
         customStyles: {
           container: {
-            backgroundColor: "#eeb16b",
+            // backgroundColor: "#eeb16b",
           },
           text: {
-            color: "white",
+            // color: "white",
           },
         },
       },
@@ -90,19 +68,6 @@ const CalendarTab = () => {
     return markObj;
   }, [selected]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const { status } = await expoCalendar.requestCalendarPermissionsAsync();
-  //     if (status === "granted") {
-  //       const calendars = await expoCalendar.getCalendarsAsync(
-  //         expoCalendar.EntityTypes.EVENT
-  //       );
-  //       console.log("Here are all your calendars:");
-  //       console.log({ calendars });
-  //     }
-  //   })();
-  // }, []);
-
   return (
     <ScrollView>
       <Calendar
@@ -111,6 +76,9 @@ const CalendarTab = () => {
         onDayPress={(day) => {
           console.log("selected day", day);
           setSelected(day);
+        }}
+        onMonthChange={({ dateString }) => {
+          setCurrentMonth(dayjs(dateString).format("MM"));
         }}
         theme={{
           calendarBackground: "white",
@@ -143,7 +111,7 @@ const CalendarTab = () => {
         markedDates={marked}
       />
       <Divider text="Events" />
-      <CheckInList />
+      <CheckInList month={currentMonth} />
       {/* <Button title="Create a new calendar" onPress={createCalendar} /> */}
     </ScrollView>
   );

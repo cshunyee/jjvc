@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   SlideInLeft,
@@ -9,14 +10,23 @@ import Animated, {
 } from "react-native-reanimated";
 import Card from "../../UI/Card";
 import dayjs from "dayjs";
+import { getLocalDateObj } from "../../utils/date";
 
 const CheckInTab = () => {
+  const [currentTime, setCurrentTime] = useState(getLocalDateObj());
   const checkInBtnOpacity = useSharedValue(1);
   const checkInBtnAnimatedStyle = useAnimatedStyle(() => {
     return {
       opacity: withTiming(checkInBtnOpacity.value),
     };
   });
+
+  useEffect(() => {
+    const minuteInterval = setInterval(() => {
+      setCurrentTime(getLocalDateObj());
+    }, 60000);
+    return () => clearInterval(minuteInterval);
+  }, []);
 
   return (
     <View style={[styles.container, styles.detailView]}>
@@ -33,7 +43,7 @@ const CheckInTab = () => {
       <Card color="white">
         <View style={styles.dateCardContent}>
           <Text style={styles.dateTitle}>
-            {dayjs().format("dddd, DD MMMM YYYY")}
+            {currentTime.format("dddd, DD MMMM YYYY")}
           </Text>
           <Text style={[styles.timeTitle]}>{dayjs().format("HH:MM")}</Text>
         </View>
