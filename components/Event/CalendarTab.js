@@ -1,21 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { StyleSheet, View, Text, Button, Platform } from "react-native";
-import {
-  Calendar,
-  CalendarList,
-  Agenda,
-  CalendarUtils,
-  TimelineList,
-  TimelineProps,
-} from "react-native-calendars";
-import Animated, {
-  SlideInRight,
-  SlideOutRight,
-  Layout,
-} from "react-native-reanimated";
+import { StyleSheet, ScrollView } from "react-native";
+import { Calendar, CalendarUtils } from "react-native-calendars";
 import * as expoCalendar from "expo-calendar";
 import dayjs from "dayjs";
 import CheckInList from "./CheckInList";
+import Divider from "../../UI/Divider";
+import checkInData from "../../data/checkin";
 
 const INITIAL_DATE = dayjs().format("YYYY-MM-DD");
 const INITIAL_TIME = { hour: 9, minutes: 0 };
@@ -53,8 +43,14 @@ const CalendarTab = () => {
     return CalendarUtils.getCalendarDateString(newDate);
   };
 
+  const formatDate = (input) => {
+    const date = new Date(input);
+    const newDate = date.setDate(date.getDate());
+    return CalendarUtils.getCalendarDateString(newDate);
+  };
+
   const marked = useMemo(() => {
-    return {
+    let markObj = {
       [getDate(0)]: {
         customStyles: {
           container: {
@@ -77,6 +73,21 @@ const CalendarTab = () => {
         },
       },
     };
+    checkInData.map((item) => {
+      markObj[formatDate(item.date)] = {
+        customStyles: {
+          container: {
+            backgroundColor: "#8adb86",
+          },
+          text: {
+            color: "white",
+            fontWeight: "bold",
+          },
+        },
+      };
+    });
+
+    return markObj;
   }, [selected]);
 
   // useEffect(() => {
@@ -93,14 +104,8 @@ const CalendarTab = () => {
   // }, []);
 
   return (
-    <Animated.View
-      entering={SlideInRight}
-      exiting={SlideOutRight}
-      layout={Layout.springify()}
-      style={styles.container}
-    >
+    <ScrollView>
       <Calendar
-        enableSwipeMonths
         style={styles.calender}
         current={INITIAL_DATE}
         onDayPress={(day) => {
@@ -137,16 +142,19 @@ const CalendarTab = () => {
         markingType={"custom"}
         markedDates={marked}
       />
+      <Divider text="Events" />
       <CheckInList />
-      {/* <Agenda /> */}
       {/* <Button title="Create a new calendar" onPress={createCalendar} /> */}
-    </Animated.View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  agenda: {
+    borderRadius: 16,
   },
   calender: {
     borderRadius: 16,
@@ -155,6 +163,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginHorizontal: 12,
     borderColor: "#4d76f0",
+  },
+  text: {
+    marginTop: 8,
+    marginHorizontal: 12,
+    textAlign: "center",
   },
 });
 

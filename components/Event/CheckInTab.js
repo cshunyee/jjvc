@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   SlideInLeft,
   SlideOutLeft,
@@ -12,7 +12,6 @@ import dayjs from "dayjs";
 
 const CheckInTab = () => {
   const checkInBtnOpacity = useSharedValue(1);
-
   const checkInBtnAnimatedStyle = useAnimatedStyle(() => {
     return {
       opacity: withTiming(checkInBtnOpacity.value),
@@ -20,43 +19,44 @@ const CheckInTab = () => {
   });
 
   return (
-    <Animated.View
-      entering={SlideInLeft}
-      exiting={SlideOutLeft}
-      layout={Layout.springify()}
-      style={styles.container}
-    >
-      <View style={[styles.container, styles.detailView]}>
-        <Card>
-          <View style={styles.detailCardContent}>
-            <Text style={[styles.detailText, styles.detailTitle]}>
-              纪念耶稣基督荣进圣城 {"\n"}棕树主日 （红色）
-            </Text>
-            <Text style={styles.detailText}>讲员：XXX</Text>
-            <Text style={styles.detailText}>主席：XXX</Text>
-            <Text style={styles.detailText}>领唱：XXX</Text>
-          </View>
-        </Card>
-        <Card color="white">
-          <View style={styles.dateCardContent}>
-            <Text style={styles.dateTitle}>
-              {dayjs().format("dddd, DD MMMM YYYY")}
-            </Text>
-            <Text style={[styles.timeTitle]}>{dayjs().format("HH:MM")}</Text>
-          </View>
-        </Card>
+    <View style={[styles.container, styles.detailView]}>
+      <Card>
+        <View style={styles.detailCardContent}>
+          <Text style={[styles.detailText, styles.detailTitle]}>
+            纪念耶稣基督荣进圣城 {"\n"}棕树主日 （红色）
+          </Text>
+          <Text style={styles.detailText}>讲员：XXX</Text>
+          <Text style={styles.detailText}>主席：XXX</Text>
+          <Text style={styles.detailText}>领唱：XXX</Text>
+        </View>
+      </Card>
+      <Card color="white">
+        <View style={styles.dateCardContent}>
+          <Text style={styles.dateTitle}>
+            {dayjs().format("dddd, DD MMMM YYYY")}
+          </Text>
+          <Text style={[styles.timeTitle]}>{dayjs().format("HH:MM")}</Text>
+        </View>
+      </Card>
 
-        <Pressable onPress={() => (checkInBtnOpacity.value = 0.5)}>
-          <Animated.View style={[styles.checkInBtn, checkInBtnAnimatedStyle]}>
-            <Text style={styles.btnText}>Check In</Text>
-          </Animated.View>
-        </Pressable>
-      </View>
-    </Animated.View>
+      <Pressable
+        onPressIn={() => (checkInBtnOpacity.value = 0.3)}
+        onPressOut={() => (checkInBtnOpacity.value = 1)}
+      >
+        <Animated.View style={[styles.checkInBtn, checkInBtnAnimatedStyle]}>
+          <Text style={styles.btnText}>Check In</Text>
+        </Animated.View>
+      </Pressable>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  box: {
+    width: 20,
+    height: 20,
+    backgroundColor: "black",
+  },
   container: {
     flex: 1,
   },
