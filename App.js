@@ -2,7 +2,14 @@ import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext } from "react";
-import { StyleSheet, Text, View, AsyncStorage } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  AsyncStorage,
+  Button,
+  Pressable,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -65,7 +72,17 @@ export default function App() {
           options={{
             title: "Profile Setting",
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="settings" size={size} color={color} />
+              <Ionicons name="person" size={size} color={color} />
+            ),
+            headerRight: ({ tintColor }) => (
+              <Pressable
+                style={({ pressed }) => [
+                  { padding: 8, marginHorizontal: 4, borderRadius: 8 },
+                  pressed && { opacity: 0.7, backgroundColor: "#c9cfe3" },
+                ]}
+              >
+                <Ionicons name="settings" size={20} color={tintColor} />
+              </Pressable>
             ),
           }}
         />
@@ -92,6 +109,7 @@ export default function App() {
     const authCtx = useContext(AuthContext);
     return (
       <NavigationContainer>
+        <StatusBar style="auto" />
         {authCtx.isLoggedIn && <MainAppStack />}
         {!authCtx.isLoggedIn && <AuthStack />}
       </NavigationContainer>

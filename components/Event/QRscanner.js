@@ -1,27 +1,40 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, Button, Text, View } from "react-native";
 import { BarCodeScanner, PermissionStatus } from "expo-barcode-scanner";
+import { Entypo } from "@expo/vector-icons";
 
-const QRScanner = ({ handleBarCodeScanned, isScanned, isShow }) => {
-  if (!isShow) return "";
-
+const QRScanner = ({ handleBarCodeScanned, isScanned, setIsShow }) => {
   const [hasPermission, setHasPermission] = useState(null);
 
   const verifyCameraPermission = async () => {
     const permissionRes = await BarCodeScanner.requestPermissionsAsync();
     setHasPermission(permissionRes.status === PermissionStatus.GRANTED);
+    setIsShow(true);
   };
 
   useEffect(() => {
+    setIsShow(false);
     verifyCameraPermission();
   }, []);
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return (
+      <View style={styles.errorContainer}>
+        <Entypo name="circle-with-cross" size={24} color="red" />
+        <Text> Requesting for camera permission</Text>
+      </View>
+    );
   }
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return (
+      <View style={styles.errorContainer}>
+        <Entypo name="circle-with-cross" size={24} color="#d34747" />
+        <Text> Application has no access to camera</Text>
+      </View>
+    );
   }
+
+  // console.log("render", isShow);
 
   return (
     <View style={styles.container}>
@@ -42,5 +55,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+  },
+  errorContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

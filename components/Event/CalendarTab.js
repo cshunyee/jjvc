@@ -40,16 +40,16 @@ const CalendarTab = () => {
           },
         },
       },
-      [selected.dateString]: {
-        customStyles: {
-          container: {
-            // backgroundColor: "#eeb16b",
-          },
-          text: {
-            // color: "white",
-          },
-        },
-      },
+      // [selected.dateString]: {
+      //   customStyles: {
+      //     container: {
+      //       // backgroundColor: "#eeb16b",
+      //     },
+      //     text: {
+      //       // color: "white",
+      //     },
+      //   },
+      // },
     };
     checkInData.map((item) => {
       markObj[formatDate(item.date)] = {
