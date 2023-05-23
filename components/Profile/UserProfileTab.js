@@ -10,7 +10,7 @@ const UserProfileTab = () => {
       title: "cshunyee",
     });
   });
-  
+
   return (
     <View style={styles.container}>
       <Text>Profile</Text>

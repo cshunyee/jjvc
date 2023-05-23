@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, useWindowDimensions } from "react-native";
 import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 
 const TabBarCS = (props) => {
+  let tabBarWidth = props.layoutWidth / (props.itemLen < 3 ? 5 : 10);
   return (
     <TabBar
       {...props}
@@ -10,7 +11,7 @@ const TabBarCS = (props) => {
       pressColor="#f0f0f0"
       indicatorStyle={{ display: "none" }}
       // tabStyle={styles.tabContainer}
-      style={[styles.tabBar, { marginHorizontal: props.layoutWidth / 5 }]}
+      style={[styles.tabBar, { marginHorizontal: tabBarWidth }]}
       renderLabel={({ route, focused, color }) => (
         <View style={[styles.tabItem, focused && styles.activeTabItem]}>
           <Text style={styles.tabText}>{route.title}</Text>
@@ -32,7 +33,11 @@ const TabViewCS = (props) => {
     <TabView
       style={styles.tabContainer}
       renderTabBar={(props) => (
-        <TabBarCS {...props} layoutWidth={layout.width} />
+        <TabBarCS
+          itemLen={routes.length}
+          {...props}
+          layoutWidth={layout.width}
+        />
       )}
       // renderTabBar={() => null}
       navigationState={{ index, routes }}
