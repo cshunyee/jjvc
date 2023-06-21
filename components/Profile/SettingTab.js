@@ -1,16 +1,20 @@
 import { useNavigation } from "@react-navigation/native";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useContext, useLayoutEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View, Dimensions, Pressable } from "react-native";
 import Modal from "react-native-modal";
 import QRCode from "react-native-qrcode-svg";
 import * as MediaLibrary from "expo-media-library";
 import * as FileSystem from "expo-file-system";
 import CardList, { Card } from "../../UI/CardList";
+import { AuthContext } from "../../store/auth-context";
+import Button from "../../UI/Button";
 
 const SettingTab = () => {
   const navigation = useNavigation();
+  const authCtx = useContext(AuthContext);
   const [isShow, setIsShow] = useState(false);
   const [qrCode, setQRCode] = useState();
+
   const deviceWidth = Dimensions.get("window").width;
   const qrCodeSize = 300;
   const qrCodePadding = 10;
@@ -38,12 +42,6 @@ const SettingTab = () => {
     }
   };
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: "cshunyee",
-    });
-  });
-
   return (
     <View style={styles.container}>
       <CardList>
@@ -51,6 +49,11 @@ const SettingTab = () => {
           <Card key={name} header={name} onPress={() => setIsShow(true)} />
         ))}
       </CardList>
+
+      <Button
+        label="Logout"
+        onPress={() => authCtx.logout()}
+      />
 
       <Modal
         isVisible={isShow}
@@ -73,7 +76,7 @@ const SettingTab = () => {
               }}
               size={qrCodeSize}
               quietZone={qrCodePadding}
-              value="http://awesome.link.qr"
+              value={new Date().toUTCString()}
             />
           </Pressable>
         </View>

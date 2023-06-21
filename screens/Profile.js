@@ -1,10 +1,12 @@
 import { StyleSheet, View } from "react-native";
-import { useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import TabViewCS from "../UI/Tab";
 import UserProfileTab from "../components/Profile/UserProfileTab";
 import SettingTab from "../components/Profile/SettingTab";
+import { AuthContext } from "../store/auth-context";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
+  const authCtx = useContext(AuthContext);
   const [routes, setRoutes] = useState([
     { key: "profile", title: "Profile" },
     { key: "relationship", title: "Relation" },
@@ -16,6 +18,12 @@ const ProfileScreen = () => {
     relationship: UserProfileTab,
     setting: SettingTab,
   };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: authCtx.username,
+    });
+  });
 
   return (
     <View style={styles.container}>

@@ -1,18 +1,22 @@
 import { createContext, useReducer, useState, AsyncStorage } from "react";
 import { Alert } from "react-native";
 
-export const AuthContext = createContext({
+const initData = {
   isLoggedIn: false,
   token: "",
   username: "",
   login: () => true,
-});
+  logout: () => true
+}
+
+export const AuthContext = createContext(initData);
 
 const AuthContextProvider = ({ children }) => {
   const [token, setToken] = useState();
   const [username, setUsername] = useState();
 
   const authenticateUser = (username, password) => {
+    if (!username || !password) return false;
     return true;
   };
 
@@ -29,11 +33,19 @@ const AuthContextProvider = ({ children }) => {
     return true;
   };
 
+  const logoutHandler = async () => {
+    setUsername("");
+    setToken("");
+  }
+
+  console.log(username, token)
+
   const value = {
     isLoggedIn: !!token,
     token: token,
     username: username,
     login: loginHandler,
+    logout: logoutHandler,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

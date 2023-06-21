@@ -1,29 +1,20 @@
 import { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Avatar } from "react-native-elements";
 import Modal from "react-native-modal";
-import Animated, {
-  useSharedValue,
-  withTiming,
-  useAnimatedStyle,
-} from "react-native-reanimated";
+import cx from 'classnames';
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import Card from "../../UI/Card";
 import dayjs from "dayjs";
 import { getLocalDateObj } from "../../utils/date";
 import QRScanner from "./QRscanner";
+import Button from "../../UI/Button";
 
 const CheckInTab = () => {
   const [scanned, setScanned] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [checked, setChecked] = useState(false);
   const [currentTime, setCurrentTime] = useState(getLocalDateObj());
-  const checkInBtnOpacity = useSharedValue(1);
-  const checkInBtnAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: withTiming(checkInBtnOpacity.value),
-    };
-  });
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
@@ -97,26 +88,23 @@ const CheckInTab = () => {
 
       {checked ? (
         <View>
-          <View style={[styles.checkInBtn, styles.checkedIn]}>
-            <FontAwesome5 name="calendar-check" size={24} color="#f7f7f7" />
-            <Text style={styles.btnText}> Check In</Text>
-          </View>
+          <Button
+            label="Check In"
+            style={styles.checkedIn}
+            disabled={checked}
+            icon={<FontAwesome5 name="calendar-check" size={24} color="#f7f7f7" />}
+          />
           <Text style={styles.checkedText}>
             Checked: Today {dayjs().format("HH:mm")}
           </Text>
         </View>
       ) : (
-        <Pressable
-          onPressIn={() => (checkInBtnOpacity.value = 0.3)}
-          onPressOut={() => (checkInBtnOpacity.value = 1)}
+        <Button
+          label="Check In"
           onPress={() => setIsShow(true)}
           disabled={checked}
-        >
-          <Animated.View style={[styles.checkInBtn, checkInBtnAnimatedStyle]}>
-            <Ionicons name="scan" size={24} color="#f7f7f7" />
-            <Text style={styles.btnText}> Check In</Text>
-          </Animated.View>
-        </Pressable>
+          icon={<Ionicons name="scan" size={24} color="#f7f7f7" />}
+        />
       )}
 
       <Modal

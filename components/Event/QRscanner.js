@@ -34,8 +34,6 @@ const QRScanner = ({ handleBarCodeScanned, isScanned, setIsShow }) => {
     );
   }
 
-  // console.log("render", isShow);
-
   return (
     <View style={styles.container}>
       <BarCodeScanner

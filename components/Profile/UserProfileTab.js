@@ -5,12 +5,6 @@ import { StyleSheet, Text, View } from "react-native";
 const UserProfileTab = () => {
   const navigation = useNavigation();
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: "cshunyee",
-    });
-  });
-
   return (
     <View style={styles.container}>
       <Text>Profile</Text>
