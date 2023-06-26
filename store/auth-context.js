@@ -1,5 +1,6 @@
 import { createContext, useReducer, useState, AsyncStorage } from "react";
 import { Alert } from "react-native";
+import authService from "../service/auth.js";
 
 const initData = {
   isLoggedIn: false,
@@ -15,30 +16,26 @@ const AuthContextProvider = ({ children }) => {
   const [token, setToken] = useState();
   const [username, setUsername] = useState();
 
-  const authenticateUser = (username, password) => {
-    if (!username || !password) return false;
-    return true;
-  };
+  const loginHandler = async (email, password) => {
+    if (!email || !password) return false;
 
-  const loginHandler = async (username, password) => {
-    const isValidUser = authenticateUser(username, password);
-    if (!isValidUser) {
-      Alert.alert("Invalid User");
+    const response = await authService.postLoginByEmail(email, password);
+    if (response.errorMsg) {
+      Alert.alert(response.errorMsg);
       return false;
-    }
+    };
 
-    setUsername(username);
-    setToken("testingUser");
-    // AsyncStorage.setItem("token", "testingUser");
-    return true;
+    console.log(response)
+
+    // setUsername("cshunyee");
+    // setToken("testingUser");
+    return false;
   };
 
   const logoutHandler = async () => {
     setUsername("");
     setToken("");
   }
-
-  console.log(username, token)
 
   const value = {
     isLoggedIn: !!token,

@@ -2,12 +2,14 @@ import { useContext, useState } from "react";
 import {
   Dimensions,
   Image,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { AuthContext } from "../store/auth-context";
@@ -39,32 +41,40 @@ const LoginScreen = ({ navigation }) => {
         />
       </View>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={"padding"}
         style={styles.formContainer}
       >
-        <Text style={styles.title}>JJVC</Text>
-        <Text style={styles.description}>Johor Jaya Vision Church</Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={true}
-        />
-        <Pressable
-          style={({ pressed }) => [styles.button, pressed && styles.pressed]}
-          onPress={onLogin}
-        >
-          <View>
-            <Text style={styles.buttonText}>Login</Text>
-          </View>
-        </Pressable>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <>
+            <Text style={styles.title}>JJVC</Text>
+            <Text style={styles.description}>Johor Jaya Vision Church</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Username"
+              value={username}
+              onChangeText={setUsername}
+            />
+            <TextInput
+              style={styles.textInput}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={true}
+            />
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                pressed && styles.pressed,
+              ]}
+              onPress={onLogin}
+            >
+              <View>
+                <Text style={styles.buttonText}>Login</Text>
+              </View>
+            </Pressable>
+          </>
+        </TouchableWithoutFeedback>
+
         <Pressable
           style={({ pressed }) => [pressed && styles.pressed]}
           onPress={onSignUp}

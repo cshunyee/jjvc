@@ -20,7 +20,8 @@ const CheckInTab = () => {
     setScanned(true);
     setChecked(true);
     setIsShow(false);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    // Save current user checkin detail to database
+    alert(`Bar code with type ${type} and data ${dayjs(data).format("YYYY-MM-DD HH:mm")} has been scanned!`);
   };
 
   useEffect(() => {
