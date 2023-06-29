@@ -21,9 +21,8 @@ const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
 
-  const onLogin = async () => {
-    const isValid = await authCtx.login(username, password);
-    // if (isValid) navigation.navigate("")
+  const onLogin = () => {
+    authCtx.login(username, password);
   };
 
   const onSignUp = () => {
@@ -40,10 +39,7 @@ const LoginScreen = ({ navigation }) => {
           }}
         />
       </View>
-      <KeyboardAvoidingView
-        behavior={"padding"}
-        style={styles.formContainer}
-      >
+      <KeyboardAvoidingView behavior={"padding"} style={styles.formContainer}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <>
             <Text style={styles.title}>JJVC</Text>

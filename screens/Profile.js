@@ -21,7 +21,7 @@ const ProfileScreen = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: authCtx.username,
+      title: authCtx.user.displayName,
     });
   });
 

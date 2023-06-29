@@ -1,7 +1,9 @@
 import {
   getAuth,
+  updateProfile,
   signInWithEmailAndPassword,
   signInWithCredential,
+  signOut,
 } from "firebase/auth";
 import { getApp } from "./firebase";
 import { useErrorMsg } from "../config/errorMsg";
@@ -17,8 +19,8 @@ export const postLoginByEmail = async (email, password) => {
       email,
       password
     );
-    const { user, credential } = userCredential;
-    storeData("credential", credential)
+    const { user, _tokenResponse: credential } = userCredential;
+    storeData("credential", credential);
     return { data: { user, credential } };
   } catch (error) {
     console.log(error);
@@ -27,19 +29,43 @@ export const postLoginByEmail = async (email, password) => {
 };
 
 export const postLoginByCredential = async () => {
-  const response = {};
   try {
     const userCredential = await signInWithCredential();
+    const { user, _tokenResponse: credential } = userCredential;
+    storeData("credential", credential);
+    return { data: { user, credential } };
   } catch (error) {
-    const errorResponse = {
-      ...response,
-      errorCode: error.code,
-      errorMsg: useErrorMsg(error.code),
-    };
-    return errorResponse;
+    console.log(error);
+    return { errorCode: error.code, errorMsg: useErrorMsg(error.code) };
+  }
+};
+
+const putUserProfile = async (userInfo) => {
+  try {
+    await updateProfile(auth.currentUser, {
+      displayName: userInfo.displayName,
+      // photoURL: "https://example.com/jane-q-user/profile.jpg",
+    });
+    return {};
+  } catch (error) {
+    console.log(error);
+    return { errorCode: error.code, errorMsg: useErrorMsg(error.code) };
+  }
+};
+
+const postSignOut = async () => {
+  try {
+    await signOut(auth);
+    return {};
+  } catch (error) {
+    console.log(error);
+    return { errorCode: error.code, errorMsg: useErrorMsg(error.code) };
   }
 };
 
 export default {
   postLoginByEmail,
+  postLoginByCredential,
+  putUserProfile,
+  postSignOut,
 };
