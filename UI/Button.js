@@ -1,12 +1,16 @@
 import { Pressable, StyleSheet, Text } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 const Button = ({
   label,
   style: propStyles,
   onPress,
   disabled = false,
-  icon
+  icon,
 }) => {
   const btnOpacity = useSharedValue(1);
   const btnAnimatedStyle = useAnimatedStyle(() => {
@@ -57,5 +61,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderRadius: 10,
     backgroundColor: "#4d76f0",
+
+    elevation: 2,
+    shadowColor: "black",
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
   },
 });

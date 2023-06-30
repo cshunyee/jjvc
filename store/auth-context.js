@@ -43,6 +43,21 @@ const AuthContextProvider = ({ children }) => {
     return true;
   };
 
+  const signUpUserHandler = async (email, password) => {
+    if (!email || !password) return false;
+
+    const response = await authService.postCreateUserByEmail(email, password);
+    if (response.errorMsg) {
+      Alert.alert(response.errorMsg);
+      return false;
+    }
+
+    const { user, credential } = response.data;
+    setUserInfo(user);
+    setToken(credential.idToken);
+    return true;
+  };
+
   const updateUserHandler = async (userInfo) => {
     const response = await authService.putUserProfile(userInfo);
     if (response.errorMsg) {
@@ -59,6 +74,7 @@ const AuthContextProvider = ({ children }) => {
     login: loginHandler,
     logout: logoutHandler,
     updateUser: updateUserHandler,
+    signUpUser: signUpUserHandler,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

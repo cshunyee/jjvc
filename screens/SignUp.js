@@ -1,15 +1,17 @@
 import { useContext, useState } from "react";
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
-  Pressable,
   StyleSheet,
   Text,
-  TextInput,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { AuthContext } from "../store/auth-context";
+import TextInput from "../UI/TextInput";
+import Button from "../UI/Button";
+import { isEmail } from "../utils/validator";
 
 const SignUp = ({ navigation }) => {
   const authCtx = useContext(AuthContext);
@@ -18,14 +20,13 @@ const SignUp = ({ navigation }) => {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
 
-  const onSaveInfo = async () => {
-    const userInfo = {
-      displayName: fullname,
-    };
-    const response = await authCtx.updateUser(userInfo);
+  const onSubmit = async () => {
+    const response = await authCtx.signUpUser(email, passowrd);
     if (response) {
+      authCtx.updateUser({ displayName: fullname });
       navigation.navigate("");
     }
+    return Alert.alert("System Error");
   };
 
   return (
@@ -33,42 +34,34 @@ const SignUp = ({ navigation }) => {
       <KeyboardAvoidingView behavior={"padding"} style={styles.formContainer}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <>
-            <Text style={styles.title}>Signup Form</Text>
+            <Text style={styles.title}>Sign Up Form</Text>
             <TextInput
-              style={styles.textInput}
               placeholder="Full Name"
               value={fullname}
               onChangeText={setFullname}
+              hasError={fullname === ""}
             />
             <TextInput
-              style={styles.textInput}
               placeholder="Email (Account)"
               value={email}
               onChangeText={setEmail}
+              hasError={!isEmail(email)}
             />
             <TextInput
-              style={styles.textInput}
               placeholder="Password"
               value={password}
               onChangeText={setPassword}
+              hasError={password === ""}
+              secureTextEntry={true}
             />
             <TextInput
-              style={styles.textInput}
               placeholder="Confirm Password"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
+              hasError={confirmPassword !== password}
+              secureTextEntry={true}
             />
-            <Pressable
-              style={({ pressed }) => [
-                styles.button,
-                pressed && styles.pressed,
-              ]}
-              onPress={onSaveInfo}
-            >
-              <View>
-                <Text style={styles.buttonText}>Save</Text>
-              </View>
-            </Pressable>
+            <Button label="Submit" style={styles.button} onPress={onSubmit} />
           </>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -88,7 +81,7 @@ const styles = StyleSheet.create({
     flex: 5,
     alignItems: "center",
     // justifyContent: "center",
-    gap: 12,
+    gap: 22,
     backgroundColor: "white",
     paddingVertical: 36,
     width: "100%",
@@ -101,31 +94,7 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     width: 350,
-    paddingHorizontal: 10,
     paddingVertical: 16,
-    marginTop: 12,
-    backgroundColor: "#4d76f0",
-    borderRadius: 6,
-    elevation: 2,
-    shadowColor: "black",
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-  },
-  buttonText: {
-    fontSize: 16,
-    color: "white",
-  },
-  pressed: {
-    opacity: 0.7,
-  },
-  textInput: {
-    padding: 20,
-    backgroundColor: "#e7e7e7",
-    color: "#000000",
-    width: 350,
-    marginBottom: 10,
-    borderRadius: 6,
-    fontSize: 16,
+    marginTop: 24,
   },
 });

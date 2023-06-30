@@ -1,8 +1,9 @@
 import {
   getAuth,
-  updateProfile,
+  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithCredential,
+  updateProfile,
   signOut,
 } from "firebase/auth";
 import { getApp } from "./firebase";
@@ -11,6 +12,22 @@ import { storeData } from "../store/async-storage";
 
 const app = getApp();
 const auth = getAuth(app);
+
+export const postCreateUserByEmail = async (email, password) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const { user, _tokenResponse: credential } = userCredential;
+    storeData("credential", credential);
+    return { data: { user, credential } };
+  } catch (error) {
+    console.log(error);
+    return { errorCode: error.code, errorMsg: useErrorMsg(error.code) };
+  }
+};
 
 export const postLoginByEmail = async (email, password) => {
   try {
