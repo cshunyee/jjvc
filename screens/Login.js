@@ -4,7 +4,6 @@ import {
   Image,
   Keyboard,
   KeyboardAvoidingView,
-  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -75,7 +74,7 @@ const LoginScreen = ({ navigation }) => {
           style={({ pressed }) => [pressed && styles.pressed]}
           onPress={onSignUp}
         >
-          <Text style={styles.createAccText}>Create Account</Text>
+          <Text style={styles.createAccText}>Not a user? Click here</Text>
         </Pressable>
       </KeyboardAvoidingView>
     </View>

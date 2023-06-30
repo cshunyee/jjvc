@@ -90,7 +90,6 @@ export default function App() {
 
   const Navigation = () => {
     const authCtx = useContext(AuthContext);
-    console.log(authCtx.isLoggedIn);
     return (
       <NavigationContainer>
         {authCtx.isLoggedIn && <MainAppStack />}
